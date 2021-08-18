@@ -2,10 +2,13 @@ package com.dhruvlimbachiya.shoppinglisttesting.di
 
 import android.content.Context
 import androidx.room.Room
+import com.dhruvlimbachiya.shoppinglisttesting.data.local.ShoppingDao
 import com.dhruvlimbachiya.shoppinglisttesting.data.local.ShoppingDatabase
 import com.dhruvlimbachiya.shoppinglisttesting.data.remote.PixabayApi
 import com.dhruvlimbachiya.shoppinglisttesting.other.Constants.BASE_URL
 import com.dhruvlimbachiya.shoppinglisttesting.other.Constants.DATABASE_NAME
+import com.dhruvlimbachiya.shoppinglisttesting.repositories.IShoppingRepository
+import com.dhruvlimbachiya.shoppinglisttesting.repositories.MainShoppingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,4 +52,10 @@ object AppModule {
         .build()
         .create(PixabayApi::class.java)
 
+    @Singleton
+    @Provides
+    fun provideMainRepository(
+        shoppingDao: ShoppingDao,
+        pixabayApi: PixabayApi
+    ) =  MainShoppingRepository(shoppingDao, pixabayApi) as IShoppingRepository
 }
