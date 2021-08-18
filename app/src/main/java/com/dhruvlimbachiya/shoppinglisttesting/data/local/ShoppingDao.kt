@@ -8,7 +8,7 @@ import androidx.room.*
  */
 
 @Dao
-interface ShoppingItemDao {
+interface ShoppingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShoppingItem(shoppingItem: ShoppingItem)
