@@ -6,8 +6,10 @@ import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.dhruvlimbachiya.shoppinglisttesting.R
+import com.dhruvlimbachiya.shoppinglisttesting.data.local.ShoppingItem
 import com.dhruvlimbachiya.shoppinglisttesting.getOrAwaitValue
 import com.dhruvlimbachiya.shoppinglisttesting.launchFragmentInHiltContainer
 import com.dhruvlimbachiya.shoppinglisttesting.repositories.FakeRepositoryAndroidTest
@@ -20,6 +22,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import javax.inject.Inject
 
 /**
  * Created by Dhruv Limbachiya on 20-08-2021.
@@ -34,6 +37,8 @@ class AddShoppingItemFragmentTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
+    @Inject
+    lateinit var fragmentFactory: ShoppingFragmentFactory
 
     @Before
     fun setUp() {
@@ -76,5 +81,25 @@ class AddShoppingItemFragmentTest {
         verify(navController).popBackStack()
 
         assertThat(testViewModel.currentImageUrl.getOrAwaitValue()).isEmpty()
+    }
+
+    @Test
+    fun addShoppingItemButtonClick_insertShoppingItemIntoDb() {
+        val testViewModel = ShoppingViewModel(FakeRepositoryAndroidTest())
+
+        launchFragmentInHiltContainer<AddShoppingItemFragment>(
+            fragmentFactory = fragmentFactory
+        ) {
+            mViewModel = testViewModel
+        }
+
+        onView(withId(R.id.etShoppingItemName)).perform(replaceText("item"))
+        onView(withId(R.id.etShoppingItemAmount)).perform(replaceText("5"))
+        onView(withId(R.id.etShoppingItemPrice)).perform(replaceText("10.5"))
+        onView(withId(R.id.btnAddShoppingItem)).perform(click())
+
+        assertThat(testViewModel.shoppingItems.getOrAwaitValue()).contains(
+            ShoppingItem("item",10.5f,5,"")
+        )
     }
 }
