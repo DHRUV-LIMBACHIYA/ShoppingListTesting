@@ -24,14 +24,13 @@ import javax.inject.Inject
  */
 
 class ShoppingFragment @Inject constructor(
-    val shoppingItemAdapter: ShoppingItemAdapter
+    val shoppingItemAdapter: ShoppingItemAdapter,
+    var viewModel: ShoppingViewModel? = null // ViewModel with FakeRepository instance.
 ) : Fragment(R.layout.fragment_shopping) {
-
-    private lateinit var mViewModel: ShoppingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
+        viewModel = viewModel ?: ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
 
         setUpRecyclerView()
         observeLiveData()
@@ -59,14 +58,14 @@ class ShoppingFragment @Inject constructor(
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition // Current position.
             val item = shoppingItemAdapter.shoppingItems[position] // Get the current item.
-            mViewModel.deleteShoppingItem(item) // Delete the shopping item.
+            viewModel?.deleteShoppingItem(item) // Delete the shopping item.
             Snackbar.make(
                 requireView(),
                 "Item deleted successfully",
                 Snackbar.LENGTH_LONG
             ).apply {
                 setAction("Undo") {
-                    mViewModel.insertShoppingItemIntoDb(item)
+                    viewModel?.insertShoppingItemIntoDb(item)
                 }
             }.show()
         }
@@ -85,12 +84,12 @@ class ShoppingFragment @Inject constructor(
      * Observe the changes on LiveData.
      */
     private fun observeLiveData() {
-        mViewModel.shoppingItems.observe(viewLifecycleOwner) {
+        viewModel?.shoppingItems?.observe(viewLifecycleOwner) {
             shoppingItemAdapter.shoppingItems = it
         }
 
-        mViewModel.totalPrice.observe(viewLifecycleOwner) {
-            val price = it ?: 0f
+        viewModel?.totalPrice?.observe(viewLifecycleOwner) {
+            val price = it
             val priceText = "Total Price : $price₹"
             tvShoppingItemPrice.text = priceText
         }
