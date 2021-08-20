@@ -5,13 +5,17 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dhruvlimbachiya.shoppinglisttesting.R
+import com.dhruvlimbachiya.shoppinglisttesting.adapters.ImageAdapter
 import com.dhruvlimbachiya.shoppinglisttesting.ui.ShoppingViewModel
+import javax.inject.Inject
 
 /**
  * Created by Dhruv Limbachiya on 18-08-2021.
  */
 
-class ImagePickFragment : Fragment(R.layout.fragment_image_pick) {
+class ImagePickFragment @Inject constructor(
+    private val imageAdapter: ImageAdapter
+) : Fragment(R.layout.fragment_image_pick) {
 
     private lateinit var mViewModel: ShoppingViewModel
 
