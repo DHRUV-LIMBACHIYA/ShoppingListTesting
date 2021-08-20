@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
 import com.dhruvlimbachiya.shoppinglisttesting.getOrAwaitValue
 import com.dhruvlimbachiya.shoppinglisttesting.launchFragmentInHiltContainer
 import com.dhruvlimbachiya.shoppinglisttesting.ui.fragments.ShoppingFragment
@@ -25,6 +26,7 @@ import javax.inject.Named
  */
 
 @ExperimentalCoroutinesApi
+@SmallTest
 @HiltAndroidTest
 class ShoppingDaoTest {
 
