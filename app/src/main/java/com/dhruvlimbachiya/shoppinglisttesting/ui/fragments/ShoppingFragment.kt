@@ -74,10 +74,12 @@ class ShoppingFragment @Inject constructor(
     /**
      * Set up the recyclerview.
      */
-    private fun setUpRecyclerView() = rvImages.apply {
-        adapter = shoppingItemAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-        ItemTouchHelper(itemTouchCallback).attachToRecyclerView(this)
+    private fun setUpRecyclerView() {
+        rvShoppingItems.apply {
+            adapter = shoppingItemAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            ItemTouchHelper(itemTouchCallback).attachToRecyclerView(this)
+        }
     }
 
     /**
