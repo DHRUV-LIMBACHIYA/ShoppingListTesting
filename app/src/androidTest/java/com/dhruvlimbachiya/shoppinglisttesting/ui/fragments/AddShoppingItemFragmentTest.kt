@@ -8,7 +8,11 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.dhruvlimbachiya.shoppinglisttesting.R
+import com.dhruvlimbachiya.shoppinglisttesting.getOrAwaitValue
 import com.dhruvlimbachiya.shoppinglisttesting.launchFragmentInHiltContainer
+import com.dhruvlimbachiya.shoppinglisttesting.repositories.FakeRepositoryAndroidTest
+import com.dhruvlimbachiya.shoppinglisttesting.ui.ShoppingViewModel
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -58,8 +62,11 @@ class AddShoppingItemFragmentTest {
     fun pressBackButton_popBackStack() {
         val navController = mock(NavController::class.java)
 
+        val testViewModel = ShoppingViewModel(FakeRepositoryAndroidTest())
+
         launchFragmentInHiltContainer<AddShoppingItemFragment> {
             Navigation.setViewNavController(requireView(), navController)
+            mViewModel = testViewModel
         }
 
         // Press back button
@@ -67,5 +74,7 @@ class AddShoppingItemFragmentTest {
 
         // verify that navController invoke popBackStack() method or not.
         verify(navController).popBackStack()
+
+        assertThat(testViewModel.currentImageUrl.getOrAwaitValue()).isEmpty()
     }
 }

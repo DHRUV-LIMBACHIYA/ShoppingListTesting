@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_add_shopping_item.*
 
 class AddShoppingItemFragment : Fragment(R.layout.fragment_add_shopping_item) {
 
-    private lateinit var mViewModel: ShoppingViewModel
+    lateinit var mViewModel: ShoppingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
